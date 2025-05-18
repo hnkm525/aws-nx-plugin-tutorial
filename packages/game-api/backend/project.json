@@ -1,0 +1,46 @@
+{
+  "name": "@dungeon-adventure/game-api-backend",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/game-api/backend/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "dependsOn": ["lint", "compile", "test", "bundle"]
+    },
+    "bundle": {
+      "cache": true,
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/packages/game-api/backend/bundle"],
+      "options": {
+        "command": "esbuild packages/game-api/backend/src/router.ts --bundle --outfile=dist/packages/game-api/backend/bundle/index.js --platform=node --format=cjs"
+      }
+    },
+    "compile": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/packages/game-api/backend/tsc"],
+      "options": {
+        "command": "tsc --build tsconfig.lib.json",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["tsx src/local-server.ts"],
+        "cwd": "packages/game-api/backend"
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/packages/game-api/backend"
+      }
+    }
+  },
+  "metadata": {
+    "apiName": "GameApi",
+    "apiType": "trpc"
+  }
+}
